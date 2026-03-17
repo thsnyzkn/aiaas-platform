@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "../app/generated/prisma/client";
 
@@ -6,12 +7,22 @@ const connectionString = `${process.env.DATABASE_URL}`;
 const adapter = new PrismaBetterSqlite3({ url: connectionString });
 const prisma = new PrismaClient({ adapter });
 
+function hashPassword(password: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const salt = crypto.randomBytes(16).toString("hex");
+    crypto.scrypt(password, salt, 64, (err, derivedKey) => {
+      if (err) reject(err);
+      resolve(`${salt}:${derivedKey.toString("hex")}`);
+    });
+  });
+}
+
 async function main() {
    await prisma.usageLog.deleteMany()
   await prisma.apiKey.deleteMany()
   await prisma.user.deleteMany()
 
-  const hash = await 'password123'
+  const hash = await hashPassword('password123')
 
   const admin = await prisma.user.create({
     data: { email: 'admin@aiaas.dev', passwordHash: hash, role: 'ADMIN' }

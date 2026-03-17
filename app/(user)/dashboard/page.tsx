@@ -1,6 +1,7 @@
 import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/app/components/stat-card";
+import { UsageChart } from "@/app/components/usage-chart";
 
 export default async function DashboardPage() {
   const session = await verifySession();
@@ -41,6 +42,8 @@ export default async function DashboardPage() {
         <StatCard label="Requests (24h)" value={requests24h} />
         <StatCard label="Requests (7d)" value={requests7d} />
       </div>
+
+      <UsageChart />
     </div>
   );
 }

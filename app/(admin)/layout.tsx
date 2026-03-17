@@ -4,6 +4,7 @@ import { Sidebar } from "@/app/components/sidebar";
 import { Header } from "@/app/components/header";
 
 const navItems = [
+  { label: "Dashboard", href: "/admin" },
   { label: "Users", href: "/admin/users" },
   { label: "API Keys", href: "/admin/api-keys" },
   { label: "Logs", href: "/admin/logs" },

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/app/lib/session";
 import { cookies } from "next/headers";
 
-const protectedRoutes = ["/dashboard", "/playground"];
+const protectedRoutes = ["/dashboard", "/api-keys", "/playground"];
 const adminRoutes = ["/admin"];
 const publicRoutes = ["/login", "/signup"];
 

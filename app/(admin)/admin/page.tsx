@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/app/components/stat-card";
+import { StatsGrid } from "@/app/components/stats-grid";
 import { AdminCharts } from "@/app/components/admin-charts";
 import { PageHeader } from "@/app/components/page-header";
 
@@ -20,11 +21,11 @@ export default async function AdminDashboardPage() {
         description="Track overall usage, top API users, and the endpoints getting the most traffic."
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <StatsGrid>
         <StatCard label="Total Users" value={userCount} />
         <StatCard label="Total API Keys" value={keyCount} />
         <StatCard label="Requests (24h)" value={logCount24h} />
-      </div>
+      </StatsGrid>
 
       <AdminCharts />
     </div>

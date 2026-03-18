@@ -1,6 +1,7 @@
 import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/app/components/stat-card";
+import { StatsGrid } from "@/app/components/stats-grid";
 import { UsageChart } from "@/app/components/usage-chart";
 import { PageHeader } from "@/app/components/page-header";
 
@@ -31,11 +32,11 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       <PageHeader title="Dashboard" description="Monitor your API usage." />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <StatsGrid>
         <StatCard label="API Keys" value={keyCount} />
         <StatCard label="Requests (24h)" value={requests24h} />
         <StatCard label="Requests (7d)" value={requests7d} />
-      </div>
+      </StatsGrid>
 
       <UsageChart />
     </div>

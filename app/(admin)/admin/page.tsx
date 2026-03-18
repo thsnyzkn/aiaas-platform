@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/app/components/stat-card";
 import { AdminCharts } from "@/app/components/admin-charts";
+import { PageHeader } from "@/app/components/page-header";
 
 export default async function AdminDashboardPage() {
   const now = new Date();
@@ -14,14 +15,10 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Admin Dashboard
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Platform-wide overview.
-        </p>
-      </div>
+      <PageHeader
+        title="Admin Dashboard"
+        description="Track overall usage, top API users, and the endpoints getting the most traffic."
+      />
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Total Users" value={userCount} />

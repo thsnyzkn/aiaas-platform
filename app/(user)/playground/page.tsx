@@ -1,6 +1,7 @@
 import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { PlaygroundClient } from "./playground-client";
+import { PageHeader } from "@/app/components/page-header";
 
 export default async function PlaygroundPage() {
   const session = await verifySession();
@@ -13,14 +14,10 @@ export default async function PlaygroundPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          API Playground
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Test AI endpoints with your API keys.
-        </p>
-      </div>
+      <PageHeader
+        title="API Playground"
+        description="Test AI endpoints with your API keys."
+      />
       <PlaygroundClient keys={keys} />
     </div>
   );

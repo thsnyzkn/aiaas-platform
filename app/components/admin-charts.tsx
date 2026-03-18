@@ -14,14 +14,31 @@ import {
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export function AdminCharts() {
-  const { data, isLoading } = useSWR("/api/admin/stats", fetcher, {
+  const { data, error, isLoading } = useSWR("/api/admin/stats", fetcher, {
     refreshInterval: 30_000,
   });
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-        <p className="text-sm text-zinc-400">Loading charts...</p>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="h-64 animate-pulse rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+        <div className="space-y-6">
+          <div className="h-28 animate-pulse rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+          <div className="h-28 animate-pulse rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || data?.error) {
+    return (
+      <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          Admin analytics unavailable
+        </p>
+        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+          The dashboard charts could not be loaded right now.
+        </p>
       </div>
     );
   }
@@ -33,7 +50,7 @@ export function AdminCharts() {
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
         <p className="mb-4 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Platform Usage (7 Days)
+          Endpoint usage (last 7 days)
         </p>
         {stats.usageOverTime.length === 0 ? (
           <p className="py-16 text-center text-sm text-zinc-400">No data</p>
@@ -64,7 +81,7 @@ export function AdminCharts() {
       <div className="space-y-6">
         <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
           <p className="mb-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Top Endpoints
+            Top used endpoints
           </p>
           {stats.topEndpoints.length === 0 ? (
             <p className="text-sm text-zinc-400">No data</p>
@@ -86,7 +103,7 @@ export function AdminCharts() {
 
         <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
           <p className="mb-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-            Top Users
+            Top API users
           </p>
           {stats.topUsers.length === 0 ? (
             <p className="text-sm text-zinc-400">No data</p>

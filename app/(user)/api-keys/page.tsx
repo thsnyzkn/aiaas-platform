@@ -1,6 +1,7 @@
 import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { ApiKeysClient } from "./api-keys-client";
+import { PageHeader } from "@/app/components/page-header";
 
 export default async function ApiKeysPage() {
   const session = await verifySession();
@@ -20,14 +21,10 @@ export default async function ApiKeysPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          API Keys
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Create and manage your API keys.
-        </p>
-      </div>
+      <PageHeader
+        title="API Keys"
+        description="Create and manage your API keys."
+      />
       <ApiKeysClient initialKeys={keys} />
     </div>
   );

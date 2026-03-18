@@ -2,6 +2,7 @@ import { verifySession } from "@/app/lib/dal";
 import { prisma } from "@/lib/prisma";
 import { StatCard } from "@/app/components/stat-card";
 import { UsageChart } from "@/app/components/usage-chart";
+import { PageHeader } from "@/app/components/page-header";
 
 export default async function DashboardPage() {
   const session = await verifySession();
@@ -28,14 +29,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Dashboard
-        </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Monitor your API usage.
-        </p>
-      </div>
+      <PageHeader title="Dashboard" description="Monitor your API usage." />
 
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="API Keys" value={keyCount} />

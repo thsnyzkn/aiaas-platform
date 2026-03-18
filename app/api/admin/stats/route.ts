@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/app/lib/dal";
+import { verifyApiSession } from "@/app/lib/dal";
 
 export async function GET() {
   try {
-    const session = await verifySession();
+    const session = await verifyApiSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Authentication required." } },
+        { status: 401 }
+      );
+    }
 
     if (session.role !== "ADMIN") {
       return NextResponse.json(
@@ -34,7 +40,10 @@ export async function GET() {
       const date = new Date(log.createdAt).toISOString().split("T")[0];
       byDate.set(date, (byDate.get(date) ?? 0) + 1);
       byEndpoint.set(log.endpoint, (byEndpoint.get(log.endpoint) ?? 0) + 1);
-      byUser.set(log.apiKey.user.email, (byUser.get(log.apiKey.user.email) ?? 0) + 1);
+      const email = log.apiKey?.user.email;
+      if (email) {
+        byUser.set(email, (byUser.get(email) ?? 0) + 1);
+      }
     }
 
     return NextResponse.json({

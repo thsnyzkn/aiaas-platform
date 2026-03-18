@@ -49,7 +49,13 @@ describe("POST /api/chat/completions", () => {
       },
     });
     expect(mockFindUnique).not.toHaveBeenCalled();
-    expect(mockCreateUsageLog).not.toHaveBeenCalled();
+    expect(mockCreateUsageLog).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        apiKeyId: null,
+        endpoint: "/api/chat/completions",
+        statusCode: 401,
+      }),
+    });
   });
 
   it("returns 401 when the API key is invalid", async () => {
@@ -69,7 +75,13 @@ describe("POST /api/chat/completions", () => {
         message: "Invalid API key.",
       },
     });
-    expect(mockCreateUsageLog).not.toHaveBeenCalled();
+    expect(mockCreateUsageLog).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        apiKeyId: null,
+        endpoint: "/api/chat/completions",
+        statusCode: 401,
+      }),
+    });
   });
 
   it("returns 429 and logs the request when rate limited", async () => {

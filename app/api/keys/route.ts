@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/app/lib/dal";
+import { verifyApiSession } from "@/app/lib/dal";
 import { generateApiKey } from "@/lib/apiKey";
 
 export async function GET() {
   try {
-    const session = await verifySession();
+    const session = await verifyApiSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Authentication required." } },
+        { status: 401 }
+      );
+    }
 
     const keys = await prisma.apiKey.findMany({
       where: { userId: session.userId },
@@ -31,7 +37,14 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await verifySession();
+    const session = await verifyApiSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Authentication required." } },
+        { status: 401 }
+      );
+    }
+
     const body = await req.json();
     const name = body.name?.trim();
     const parsedLimit = Number(body.requestLimitPerMin);

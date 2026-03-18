@@ -45,8 +45,8 @@ model UsageLog {
   latencyMs  Int
   createdAt  DateTime @default(now())
 
-  apiKeyId String
-  apiKey   ApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  apiKeyId String?
+  apiKey   ApiKey? @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
 
   @@index([apiKeyId])
   @@index([createdAt])

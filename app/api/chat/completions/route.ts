@@ -9,6 +9,7 @@ export async function POST(req: Request) {
     const apiKeyHeader = req.headers.get("x-api-key");
 
     if (!apiKeyHeader) {
+      await logUsage(null, 401, startTime);
       return NextResponse.json(
         {
           error: {
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
     });
 
     if (!apiKey) {
+      await logUsage(null, 401, startTime);
       return NextResponse.json(
         { error: { code: "UNAUTHORIZED", message: "Invalid API key." } },
         { status: 401 }
@@ -96,7 +98,7 @@ export async function POST(req: Request) {
   }
 }
 
-async function logUsage(apiKeyId: string, statusCode: number, startTime: number) {
+async function logUsage(apiKeyId: string | null, statusCode: number, startTime: number) {
   await prisma.usageLog.create({
     data: {
       apiKeyId,

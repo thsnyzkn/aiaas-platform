@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const {
-  mockVerifySession,
+  mockVerifyApiSession,
   mockUpdateMany,
   mockFindMany,
   mockFindUnique,
   mockUpdate,
 } = vi.hoisted(() => ({
-  mockVerifySession: vi.fn(),
+  mockVerifyApiSession: vi.fn(),
   mockUpdateMany: vi.fn(),
   mockFindMany: vi.fn(),
   mockFindUnique: vi.fn(),
@@ -15,7 +15,7 @@ const {
 }));
 
 vi.mock("@/app/lib/dal", () => ({
-  verifySession: mockVerifySession,
+  verifyApiSession: mockVerifyApiSession,
 }));
 
 vi.mock("@/lib/prisma", () => ({
@@ -35,7 +35,7 @@ import { PATCH as toggleKey } from "@/app/api/admin/keys/[id]/route";
 describe("admin key routes", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockVerifySession.mockResolvedValue({ userId: "admin_1", role: "ADMIN" });
+    mockVerifyApiSession.mockResolvedValue({ userId: "admin_1", role: "ADMIN" });
     mockUpdateMany.mockResolvedValue({ count: 2 });
     mockFindMany.mockResolvedValue([]);
     mockFindUnique.mockResolvedValue({
@@ -102,7 +102,7 @@ describe("admin key routes", () => {
   });
 
   it("rejects bulk disable for non-admin users", async () => {
-    mockVerifySession.mockResolvedValue({ userId: "user_1", role: "USER" });
+    mockVerifyApiSession.mockResolvedValue({ userId: "user_1", role: "USER" });
 
     const req = new Request("http://localhost/api/admin/keys/bulk-disable", {
       method: "POST",

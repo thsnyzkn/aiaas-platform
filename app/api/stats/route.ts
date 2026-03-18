@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/app/lib/dal";
+import { verifyApiSession } from "@/app/lib/dal";
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await verifySession();
+    const session = await verifyApiSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Authentication required." } },
+        { status: 401 }
+      );
+    }
+
     const range = req.nextUrl.searchParams.get("range") ?? "7d";
 
     const days = range === "24h" ? 1 : range === "30d" ? 30 : 7;

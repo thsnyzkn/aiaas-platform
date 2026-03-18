@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/app/lib/dal";
+import { verifyApiSession } from "@/app/lib/dal";
 
 export async function PATCH(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await verifySession();
+    const session = await verifyApiSession();
+    if (!session) {
+      return NextResponse.json(
+        { error: { code: "UNAUTHORIZED", message: "Authentication required." } },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
 
     const apiKey = await prisma.apiKey.findUnique({ where: { id } });
@@ -28,7 +35,7 @@ export async function PATCH(
 
     const updated = await prisma.apiKey.update({
       where: { id },
-      data: { isActive: !apiKey.isActive },
+      data: { isActive: false },
       select: {
         id: true,
         key: true,

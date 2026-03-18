@@ -86,7 +86,7 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: ApiKey[] }) {
       );
       setStatus({
         tone: "success",
-        message: json.data.isActive ? "API key enabled." : "API key disabled.",
+        message: "API key disabled.",
       });
     } catch {
       setStatus({ tone: "error", message: "Failed to update API key." });
@@ -217,17 +217,17 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: ApiKey[] }) {
                   </Button>
                   <Button
                     type="button"
-                    aria-label={`${k.isActive ? "Disable" : "Enable"} API key ${k.name}`}
-                    disabled={togglingId === k.id}
+                    aria-label={`Disable API key ${k.name}`}
+                    disabled={togglingId === k.id || !k.isActive}
                     onClick={() => handleToggle(k.id)}
-                    variant={k.isActive ? "destructive" : "success"}
+                    variant="destructive"
                     size="sm"
                   >
                     {togglingId === k.id
                       ? "Saving..."
                       : k.isActive
                         ? "Disable"
-                        : "Enable"}
+                        : "Disabled"}
                   </Button>
                 </div>
               </article>
@@ -305,17 +305,17 @@ export function ApiKeysClient({ initialKeys }: { initialKeys: ApiKey[] }) {
                           </Button>
                           <Button
                             type="button"
-                            disabled={togglingId === k.id}
-                            aria-label={`${k.isActive ? "Disable" : "Enable"} API key ${k.name}`}
+                            disabled={togglingId === k.id || !k.isActive}
+                            aria-label={`Disable API key ${k.name}`}
                             onClick={() => handleToggle(k.id)}
-                            variant={k.isActive ? "destructive" : "success"}
+                            variant="destructive"
                             size="sm"
                           >
                             {togglingId === k.id
                               ? "Saving..."
                               : k.isActive
                                 ? "Disable"
-                                : "Enable"}
+                                : "Disabled"}
                           </Button>
                         </div>
                       </td>

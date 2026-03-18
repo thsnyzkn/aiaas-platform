@@ -49,13 +49,35 @@ The product has two workspaces:
 ## Local Development
 
 ```bash
+# 1) clone
+git clone https://github.com/thsnyzkn/aiaas-platform.git
+cd aiaas-platform
+
+# 2) install dependencies
 npm install
-npx prisma migrate dev
-npx prisma db seed
+
+# 3) create env file
+cp .env.example .env
+
+# 4) optional: generate a stronger session secret
+# openssl rand -base64 32
+
+# 5) prepare database + seed accounts
+npm run db:bootstrap
+
+# 6) run app
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+If you prefer manual DB setup, use:
+
+```bash
+npx prisma generate
+npx prisma migrate deploy
+npx prisma db seed
+```
 
 ## Seeded Accounts
 
@@ -69,5 +91,4 @@ Open [http://localhost:3000](http://localhost:3000).
 ```bash
 npm test
 ```
-
 

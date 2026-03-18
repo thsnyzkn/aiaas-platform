@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest --watch",
+    "db:bootstrap": "prisma generate && prisma migrate deploy && prisma db seed",
     "db:setup": "prisma migrate dev --name init && prisma db seed",
     "db:reset": "prisma migrate reset --force && prisma db seed",
     "db:studio": "prisma studio"

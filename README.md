@@ -1,6 +1,6 @@
 # AIaaS Platform
 
-Frontend-first AI as a Service admin panel built for a case study with Next.js 16, TypeScript, Prisma, and SQLite.
+Frontend-first AI as a Service admin panel built with Next.js 16, TypeScript, Prisma, and SQLite.
 
 The product has two workspaces:
 - `USER`: create, copy, list, disable, and use personal API keys
@@ -45,9 +45,7 @@ The product has two workspaces:
 - Server Components are used for initial page data.
 - Route Handlers back the key-management and AI playground workflows.
 - `UsageLog` is the analytics source for user and admin dashboards.
-- Runtime DB adapter selection is environment-driven:
-  - in production, if `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` are present, it uses Turso (`libsql`)
-  - otherwise it uses local SQLite from `DATABASE_URL`
+- Local development uses SQLite; production can run with Turso since Vercel environment does not support SQLite right away.
 
 ## Local Development
 
@@ -60,6 +58,7 @@ cd aiaas-platform
 
 # 2) use supported Node version
 nvm use
+# if you don't use nvm, set Node to 22.x (or 24+)
 
 # 3) install dependencies
 npm install
@@ -81,29 +80,6 @@ touch dev.db
 npx prisma generate
 npx prisma migrate deploy
 npx prisma db seed
-```
-
-
-
-## Vercel + Turso
-
-To deploy on Vercel without local-file SQLite errors, configure:
-
-- `TURSO_DATABASE_URL`
-- `TURSO_AUTH_TOKEN`
-- `SESSION_SECRET`
-
-The app will automatically switch to Turso in production when those Turso variables are present.
-`DATABASE_URL` is still used for local Prisma CLI workflows (`migrate`, `db seed`) unless you explicitly
-run those commands against Turso from your own environment.
-
-If your Turso database is empty, apply SQL migrations from:
-- `prisma/migrations/*/migration.sql`
-
-Then seed Turso data from your machine:
-
-```bash
-npm run db:turso:seed
 ```
 
 ## Seeded Accounts

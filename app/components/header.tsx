@@ -1,11 +1,12 @@
 import { LogoutButton } from "@/app/components/logout-button";
+import type { Role } from "@/app/lib/definitions";
 
 export function Header({
   email,
   role,
 }: {
   email: string;
-  role: string;
+  role: Role;
 }) {
   return (
     <header className="flex flex-col gap-3 border-b border-zinc-200 bg-white px-4 py-4 dark:border-zinc-800 dark:bg-zinc-900 sm:flex-row sm:items-center sm:justify-between sm:px-6">

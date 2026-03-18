@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "@/app/lib/session";
-import { cookies } from "next/headers";
 
 const protectedRoutes = ["/dashboard", "/api-keys", "/playground"];
 const adminRoutes = ["/admin"];
@@ -13,7 +12,7 @@ export default async function proxy(req: NextRequest) {
   const isAdmin = adminRoutes.some((r) => path.startsWith(r));
   const isPublic = publicRoutes.includes(path);
 
-  const cookie = (await cookies()).get("session")?.value;
+  const cookie = req.cookies.get("session")?.value;
   const session = await decrypt(cookie);
 
   // Redirect unauthenticated users away from protected routes

@@ -13,9 +13,11 @@ export const LoginFormSchema = z.object({
   password: z.string().min(1, { error: "Password is required." }),
 });
 
+export type Role = "USER" | "ADMIN";
+
 export type SessionPayload = {
   userId: string;
-  role: string;
+  role: Role;
   expiresAt: Date;
 };
 

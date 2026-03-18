@@ -1,5 +1,6 @@
 import { Header } from "@/app/components/header";
 import { Sidebar } from "@/app/components/sidebar";
+import type { Role } from "@/app/lib/definitions";
 
 type NavItem = {
   label: string;
@@ -14,7 +15,7 @@ export function WorkspaceShell({
 }: {
   children: React.ReactNode;
   email: string;
-  role: string;
+  role: Role;
   navItems: NavItem[];
 }) {
   return (

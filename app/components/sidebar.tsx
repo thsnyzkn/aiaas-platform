@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { Role } from "@/app/lib/definitions";
 
 type NavItem = { label: string; href: string };
 
@@ -10,7 +11,7 @@ export function Sidebar({
   role,
 }: {
   items: NavItem[];
-  role: string;
+  role: Role;
 }) {
   const pathname = usePathname();
 

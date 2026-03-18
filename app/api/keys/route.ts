@@ -34,6 +34,10 @@ export async function POST(req: Request) {
     const session = await verifySession();
     const body = await req.json();
     const name = body.name?.trim();
+    const parsedLimit = Number(body.requestLimitPerMin);
+    const requestLimitPerMin = Number.isInteger(parsedLimit)
+      ? parsedLimit
+      : 10;
 
     if (!name) {
       return NextResponse.json(
@@ -42,10 +46,23 @@ export async function POST(req: Request) {
       );
     }
 
+    if (requestLimitPerMin < 10) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "VALIDATION_ERROR",
+            message: "Request limit must be at least 10 per minute.",
+          },
+        },
+        { status: 400 }
+      );
+    }
+
     const apiKey = await prisma.apiKey.create({
       data: {
         key: generateApiKey(),
         name,
+        requestLimitPerMin,
         userId: session.userId,
       },
       select: {

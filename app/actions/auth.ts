@@ -37,7 +37,7 @@ export async function signup(
   });
 
   await createSession(user.id, user.role);
-  redirect("/dashboard");
+  redirect(user.role === "ADMIN" ? "/admin" : "/dashboard");
 }
 
 export async function login(
@@ -66,7 +66,7 @@ export async function login(
   }
 
   await createSession(user.id, user.role);
-  redirect("/dashboard");
+  redirect(user.role === "ADMIN" ? "/admin" : "/dashboard");
 }
 
 export async function logout() {

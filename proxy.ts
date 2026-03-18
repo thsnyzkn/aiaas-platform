@@ -28,7 +28,9 @@ export default async function proxy(req: NextRequest) {
 
   // Redirect authenticated users away from login/signup
   if (isPublic && session?.userId) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    return NextResponse.redirect(
+      new URL(session.role === "ADMIN" ? "/admin" : "/dashboard", req.nextUrl)
+    );
   }
 
   return NextResponse.next();

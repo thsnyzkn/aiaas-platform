@@ -27,7 +27,7 @@ model ApiKey {
   key                String   @unique
   name               String
   isActive           Boolean  @default(true)
-  requestLimitPerMin Int      @default(60)
+  requestLimitPerMin Int      @default(10)
   createdAt          DateTime @default(now())
 
   userId    String

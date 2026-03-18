@@ -7,7 +7,7 @@ export default async function Home() {
   const session = await decrypt(cookie);
 
   if (session?.userId) {
-    redirect("/dashboard");
+    redirect(session.role === "ADMIN" ? "/admin" : "/dashboard");
   } else {
     redirect("/login");
   }

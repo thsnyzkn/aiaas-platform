@@ -2,103 +2,80 @@
 
 import { useActionState } from "react";
 import { signup } from "@/app/actions/auth";
-import Link from "next/link";
+import { AuthFormShell } from "@/app/components/auth-form-shell";
+import { AuthTextField } from "@/app/components/auth-text-field";
+import { Button } from "@/app/components/button";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
+  const emailError = state?.errors?.email?.[0];
+  const passwordError = state?.errors?.password?.[0];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-zinc-950">
-      <div className="w-full max-w-sm space-y-6 rounded-lg border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Create account
-          </h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Sign up to start using the AI platform.
-          </p>
-        </div>
-
-        <form action={action} className="space-y-4">
-          <div className="space-y-2">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-            {state?.errors?.email && (
-              <p className="text-sm text-red-500">{state.errors.email[0]}</p>
-            )}
+    <AuthFormShell
+      title="Create account"
+      description="Sign up to start using the platform."
+      alternateHref="/login"
+      alternateText="Already have an account?"
+      alternateLabel="Sign in"
+    >
+        <form action={action} className="mt-8 space-y-5" noValidate>
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            className="min-h-5 text-sm text-red-600 dark:text-red-400"
+          >
+            {state?.message}
           </div>
 
-          <div className="space-y-2">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Min. 8 characters"
-              className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-            {state?.errors?.password && (
-              <p className="text-sm text-red-500">
-                {state.errors.password[0]}
-              </p>
-            )}
-          </div>
+          <AuthTextField
+            id="email"
+            name="email"
+            label="Email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            error={emailError}
+          />
 
-          <div className="flex items-center gap-2">
+          <AuthTextField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Minimum 8 characters"
+            error={passwordError}
+            hint="Use at least 8 characters."
+          />
+
+          <label className="flex items-start gap-3 rounded-2xl border border-zinc-200 bg-zinc-50/80 px-4 py-3 text-sm text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-300">
             <input
               id="role"
               name="role"
               type="checkbox"
               value="ADMIN"
-              className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-700"
+              className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             />
-            <label
-              htmlFor="role"
-              className="text-sm text-zinc-700 dark:text-zinc-300"
-            >
-              Register as Admin
-            </label>
-          </div>
+            <span className="space-y-1">
+              <span className="block font-medium text-zinc-900 dark:text-zinc-100">
+                Register as admin
+              </span>
+              <span className="block text-zinc-500 dark:text-zinc-400">
+                Enables access to user, key, and usage oversight screens.
+              </span>
+            </span>
+          </label>
 
-          {state?.message && (
-            <p className="text-sm text-red-500">{state.message}</p>
-          )}
-
-          <button
+          <Button
             type="submit"
             disabled={pending}
-            className="w-full rounded-md bg-zinc-900 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            aria-busy={pending}
+            fullWidth
           >
-            {pending ? "Creating account..." : "Sign up"}
-          </button>
+            {pending ? "Creating account..." : "Create account"}
+          </Button>
         </form>
-
-        <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="font-medium text-zinc-900 hover:underline dark:text-zinc-50"
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthFormShell>
   );
 }

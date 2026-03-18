@@ -45,6 +45,9 @@ The product has two workspaces:
 - Server Components are used for initial page data.
 - Route Handlers back the key-management and AI playground workflows.
 - `UsageLog` is the analytics source for user and admin dashboards.
+- Runtime DB adapter selection is environment-driven:
+  - in production, if `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` are present, it uses Turso (`libsql`)
+  - otherwise it uses local SQLite from `DATABASE_URL`
 
 ## Local Development
 
@@ -79,6 +82,26 @@ npx prisma migrate deploy
 npx prisma db seed
 ```
 
+## Vercel + Turso
+
+To deploy on Vercel without local-file SQLite errors, configure:
+
+- `TURSO_DATABASE_URL`
+- `TURSO_AUTH_TOKEN`
+- `SESSION_SECRET`
+
+The app will automatically switch to Turso in production when those Turso variables are present.
+`DATABASE_URL` is still used for local Prisma CLI workflows (`migrate`, `db seed`) unless you explicitly
+run those commands against Turso from your own environment.
+
+For the first Turso setup (empty database), run once from your machine:
+
+```bash
+npm run db:turso:bootstrap
+```
+
+This applies SQL migrations to Turso and seeds the default users.
+
 ## Seeded Accounts
 
 | Email           | Password    | Role  |
@@ -91,4 +114,3 @@ npx prisma db seed
 ```bash
 npm test
 ```
-

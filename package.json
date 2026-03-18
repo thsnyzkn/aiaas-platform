@@ -10,12 +10,14 @@
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "db:bootstrap": "prisma generate && prisma migrate deploy && prisma db seed",
+    "db:turso:bootstrap": "tsx prisma/turso-bootstrap.ts && PRISMA_USE_TURSO=true prisma db seed",
     "db:setup": "prisma migrate dev --name init && prisma db seed",
     "db:reset": "prisma migrate reset --force && prisma db seed",
     "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.5.0",
+    "@prisma/adapter-libsql": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "dotenv": "^17.3.1",
     "jose": "^6.2.1",

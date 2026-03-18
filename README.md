@@ -34,8 +34,14 @@ The product has two workspaces:
 
 ## Architecture Notes
 
-- Auth is cookie-based and role-aware via signed JWT sessions.
-- `proxy.ts` handles optimistic route protection and redirects.
+- Authentication is based on the
+  [Next.js Authentication Guide](https://nextjs.org/docs/pages/guides/authentication),
+  which was the main starting point for the implementation.
+- The app uses cookie-based auth with a signed JWT session stored in an `httpOnly` cookie.
+  The token contains the user id, role, and expiry, and is verified on the server for
+  protected pages and route handlers.
+- Authorization is role-based from the session payload. `proxy.ts` only performs lightweight
+  cookie checks and redirects; real access control stays on the server.
 - Server Components are used for initial page data.
 - Route Handlers back the key-management and AI playground workflows.
 - `UsageLog` is the analytics source for user and admin dashboards.
@@ -63,13 +69,5 @@ Open [http://localhost:3000](http://localhost:3000).
 ```bash
 npm test
 ```
-
-Current automated coverage focuses on:
-- password hashing
-- API key generation
-- rate limiting
-- chat completions route behavior
-- user key ownership checks
-- admin key disable flows
 
 

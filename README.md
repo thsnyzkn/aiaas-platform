@@ -51,36 +51,39 @@ The product has two workspaces:
 
 ## Local Development
 
+Use Node `22.x` (LTS) or `24+`. Node `23` is not supported by Prisma in this stack.
+
 ```bash
 # 1) clone
 git clone https://github.com/thsnyzkn/aiaas-platform.git
 cd aiaas-platform
 
-# 2) install dependencies
+# 2) use supported Node version
+nvm use
+
+# 3) install dependencies
 npm install
 
-# 3) create env file
-cp .env.example .env
+# 4) one-time local setup (creates .env/dev.db and seeds)
+npm run quickstart
 
-# 4) optional: generate a stronger session secret
-# openssl rand -base64 32
-
-# 5) prepare database + seed accounts
-npm run db:bootstrap
-
-# 6) run app
+# 5) run app
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-If you prefer manual DB setup, use:
+If you prefer manual setup, use:
 
 ```bash
+cp .env.example .env
+touch dev.db
 npx prisma generate
 npx prisma migrate deploy
 npx prisma db seed
 ```
+
+
 
 ## Vercel + Turso
 
@@ -94,13 +97,14 @@ The app will automatically switch to Turso in production when those Turso variab
 `DATABASE_URL` is still used for local Prisma CLI workflows (`migrate`, `db seed`) unless you explicitly
 run those commands against Turso from your own environment.
 
-For the first Turso setup (empty database), run once from your machine:
+If your Turso database is empty, apply SQL migrations from:
+- `prisma/migrations/*/migration.sql`
+
+Then seed Turso data from your machine:
 
 ```bash
-npm run db:turso:bootstrap
+npm run db:turso:seed
 ```
-
-This applies SQL migrations to Turso and seeds the default users.
 
 ## Seeded Accounts
 

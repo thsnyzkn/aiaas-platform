@@ -2,6 +2,9 @@
   "name": "aiaas-platform",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22 <23 || >=24"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,8 +12,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest --watch",
+    "quickstart": "[ -f .env ] || cp .env.example .env; touch dev.db; npm run db:bootstrap",
     "db:bootstrap": "prisma generate && prisma migrate deploy && prisma db seed",
-    "db:turso:bootstrap": "tsx prisma/turso-bootstrap.ts && PRISMA_USE_TURSO=true prisma db seed",
+    "db:turso:seed": "PRISMA_USE_TURSO=true prisma db seed",
     "db:setup": "prisma migrate dev --name init && prisma db seed",
     "db:reset": "prisma migrate reset --force && prisma db seed",
     "db:studio": "prisma studio"
@@ -41,7 +45,7 @@
     "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5",
+    "typescript": "5.9.3",
     "vitest": "^4.1.0"
   }
 }
